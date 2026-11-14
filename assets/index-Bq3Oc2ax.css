@@ -243,3 +243,9 @@ progress::-webkit-progress-bar{background:var(--inset)}progress::-webkit-progres
 
 .scene-running .crew-walking .crew-idle{animation:.5s linear infinite crew-walk;transform-box:fill-box;transform-origin:50% 100%}
 @keyframes crew-walk{0%,to{transform:translateY(0) rotate(-4deg)}25%,75%{transform:translateY(-4px) rotate(0)}50%{transform:translateY(0) rotate(4deg)}}
+
+/* card banners: shown on unlocked cards when assets/banners/NN.png exists */
+.science-card-art .card-banner-img{display:none}
+.science-card-art.has-banner{aspect-ratio:3/1;height:auto;overflow:hidden}
+.science-card-art.has-banner .card-banner-img{display:block;object-fit:cover;width:100%;height:100%;position:absolute;inset:0}
+.science-card-art.has-banner .micro-label{z-index:1;background:var(--surface);color:var(--ink);border-radius:999px;padding:.05rem .55rem}
