@@ -49,36 +49,37 @@ function tutChip(cls,icon,text){return tutH(`span`,{className:`tut-chip ${cls}`}
  * holdAfter keeps a beat up for a moment after `until` becomes true. */
 var TUT_BEATS=[
   {id:`welcome`,coach:!0,center:!0,targets:()=>[],nextLabel:`Let’s go`,
-   title:()=>`Welcome to Sol 0, Commander!`,
+   title:()=>`Welcome, Commander!`,
    body:()=>[
-     tutH(`p`,null,`This is a practice day. `,tutB(`Nothing is saved`),`, the clock is paused, and you can skip any time.`),
-     tutH(`p`,null,`You’ll learn to read the meters, make a trade-off, and run a task.`),
+     tutH(`p`,null,`Let’s look after a Mars colony together. When you make a choice, you give something up to get something you need.`),
+     tutH(`p`,null,`This is a practice day. `,tutB(`Nothing is saved`),`. The clock is paused, and you can skip any time.`),
      tutH(`div`,{className:`tut-facts`},tutH(`span`,null,tutIco(`clock`,15),` A few minutes`),tutH(`span`,null,tutIco(`check`,15),` Nothing is saved`),tutH(`span`,null,tutIco(`flag`,15),` Skip any time`))]},
 
   {id:`clock`,coach:!0,targets:()=>[`.sol-status`],
-   title:()=>`A Sol is a Mars day`,
+   title:()=>`A Sol is one Mars day`,
    body:()=>[
-     tutH(`p`,null,`One Sol lasts `,tutB(`${T.solDurationSec} seconds`),` here: `,tutB(`${T.daylightDurationSec} seconds of daylight`),`, while the panels charge the batteries, then `,tutB(`${T.solDurationSec-T.daylightDurationSec} seconds of night`),`.`),
-     tutH(`p`,null,`You have `,tutB(`${T.dayCount} Sols`),` to finish the mission.`),
-     tutH(`p`,{className:`tut-tip`},tutK(`Space`),` pauses the game any time, so you can stop and think.`)]},
+     tutH(`p`,null,`One Sol lasts `,tutB(`${T.solDurationSec} seconds`),` here. `,tutB(`${T.daylightDurationSec} seconds`),` are daylight, while the solar panels fill the batteries. Then `,tutB(`${T.solDurationSec-T.daylightDurationSec} seconds`),` are night.`),
+     tutH(`p`,null,`You have `,tutB(`${T.dayCount} days`),` to finish.`),
+     tutH(`p`,{className:`tut-tip`},tutK(`Space`),` pauses the game, so you can stop and think.`)]},
 
   {id:`meters`,coach:!0,targets:()=>[`.resource-meters`],
    arm:({dispatch})=>dispatch({type:`tutorial-event`,greenhouseMode:`low`}),
    title:()=>`Four meters to watch`,
    body:()=>[
      tutLegend([
-       {c:`sun`,icon:`power`,title:`Power`,text:`keeps the outpost running. Panels charge it by day. The base uses it all the time.`},
+       {c:`sun`,icon:`power`,title:`Power`,text:`keeps the base running.`},
        {c:`blue`,icon:`water`,title:`Air & Water`,text:`is what the crew breathes and drinks.`},
-       {c:`teal`,icon:`health`,title:`Crew Health`,text:`falls when radiation gets through.`},
-       {c:`grape`,icon:`science`,title:`Research`,text:`is the goal. Fill it to 100%.`}]),
-     tutH(`p`,null,`If Power, Air & Water, or Crew Health hits zero, the mission ends. The `,tutB(`↑ ↓`),` numbers show how fast each meter is changing every second.`)]},
+       {c:`teal`,icon:`health`,title:`Crew Health`,text:`shows how safe the crew is.`},
+       {c:`grape`,icon:`science`,title:`Research`,text:`is how you finish.`}]),
+     tutH(`p`,null,`The `,tutB(`↑ ↓`),` arrows show if a meter is going up or down.`),
+     tutH(`p`,null,`If Power, Air & Water, or Crew Health reaches zero, the mission ends.`)]},
 
   {id:`greenhouse-go`,coach:!0,module:`greenhouse`,dot:!1,
    until:(s,sel)=>sel===`greenhouse`,
    finish:({onSelect})=>onSelect(`greenhouse`),
    targets:()=>tutAway(`greenhouse`),
-   title:()=>`Five modules, five jobs`,
-   body:()=>[tutP(`Each module has its own controls and tasks. Open the `,tutB(`Greenhouse`),`.`)],
+   title:()=>`Each place has one job`,
+   body:()=>[tutP(`The Greenhouse turns power into air and water. Go ahead and open it.`)],
    hint:()=>tutGo(`greenhouse`)},
 
   /* A few seconds with the card gone, so they can open other modules without a prompt. */
@@ -88,13 +89,13 @@ var TUT_BEATS=[
    gate:s=>s.greenhouseMode===`high`,
    finish:({dispatch,onSelect})=>{onSelect(`greenhouse`);dispatch({type:`set-greenhouse-mode`,mode:`high`})},
    targets:()=>[`.mode-buttons`],
-   title:()=>`Try a trade-off`,
-   body:()=>[tutP(`Switch to `,tutB(`High yield`),`. It uses more power and makes more air and water.`)],
+   title:()=>`Make more air and water`,
+   body:()=>[tutP(`Try `,tutB(`High yield`),`. You use more power, but you make more air and water.`)],
    hint:()=>[`Press `,tutB(`High yield`),`.`]},
 
   {id:`greenhouse-see`,coach:!0,module:`greenhouse`,free:!0,dot:!1,run:!0,minWait:9000,
    title:()=>`Watch the meters`,
-   body:()=>[tutP(`The arrows changed as soon as you switched. Let the meters move for a moment.`)]},
+   body:()=>[tutP(`Power goes up slower, but air and water go up faster.`)]},
 
   {id:`greenhouse-why`,coach:!0,module:`greenhouse`,dot:!1,targets:()=>[`.resource-meters`],
    leave:({dispatch})=>dispatch({type:`tutorial-event`,greenhouseMode:`standard`}),
@@ -102,18 +103,20 @@ var TUT_BEATS=[
    body:({state})=>{
      let a=tutRates(state,{greenhouseMode:`standard`}),b=tutRates(state,{greenhouseMode:`high`});
      return [
-       tutP(`You traded `,tutB(`power`),` for `,tutB(`air and water`),`.`),
-       tutTable([`Per second, in daylight`,`Standard`,`High yield`],[
+       tutP(`You gave up some `,tutB(`power`),`, but you gained `,tutB(`air and water`),`.`),
+       tutTable([`Each second, in daylight`,`Standard`,`High yield`],[
          {label:`Power`,icon:`power`,cells:[{text:tutArrow(a.power)},{text:tutArrow(b.power),tone:b.power<a.power?`down`:`up`}]},
          {label:`Air & Water`,icon:`water`,cells:[{text:tutArrow(a.lifeSupport)},{text:tutArrow(b.lifeSupport),tone:b.lifeSupport>a.lifeSupport?`up`:`down`}]}]),
-       tutP(tutB(`Low`),` saves power, but air and water slowly fall. Smart commanders switch modes whenever a meter runs low.`)]}},
+       tutP(`When air and water are low, turn the Greenhouse up.`),
+       tutP(tutB(`Low`),` saves power, but air and water slowly fall.`),
+       tutP(`Good astronauts switch modes whenever a meter runs low.`)]}},
 
   {id:`task-go`,coach:!0,module:`comms`,
    until:(s,sel)=>sel===`comms`,
    finish:({onSelect})=>onSelect(`comms`),
    targets:()=>tutAway(`comms`),
-   title:()=>`Tasks raise your research`,
-   body:()=>[tutP(`Tasks are how you fill Research. They also unlock NASA science cards. Open the `,tutB(`Comms Dish`),`.`)],
+   title:()=>`Tasks fill Research`,
+   body:()=>[tutP(`A task uses some power, but it raises Research. Open the `,tutB(`Comms Dish`),`.`)],
    hint:()=>tutGo(`comms`)},
 
   {id:`task-look`,dot:!1,wait:4000},
@@ -130,26 +133,25 @@ var TUT_BEATS=[
    body:()=>{
      let t=tutTask();
      return [
-       tutH(`p`,null,`Every task shows what it `,tutB(`costs`),` and what you `,tutB(`earn`),`:`),
+       tutH(`p`,null,`Look at what this one costs. Then look at what you get back.`),
        tutH(`ul`,{className:`tut-list tut-chips`},
-         tutH(`li`,{key:1},tutChip(`trade-power`,`power`,`−${t.powerCost} power`),tutH(`span`,null,`The cost, taken from your batteries.`)),
-         tutH(`li`,{key:2},tutChip(`trade-science`,`science`,`+${t.taskReward}% science`),tutH(`span`,null,`The reward, added to Research.`)),
-         tutH(`li`,{key:3},tutChip(`trade-science`,`cards`,`Science card`),tutH(`span`,null,`A bonus: a real NASA fact to collect.`))),
-       tutH(`p`,null,`Check your meters before you start one.`),
-       tutH(`p`,null,`Setting the Mars clock is quick and cheap. Go ahead and run it.`)]},
+         tutH(`li`,{key:1},tutChip(`trade-power`,`power`,`−${t.powerCost} power`),tutH(`span`,null,`The power you spend.`)),
+         tutH(`li`,{key:2},tutChip(`trade-science`,`science`,`+${t.taskReward}% science`),tutH(`span`,null,`The research you gain.`)),
+         tutH(`li`,{key:3},tutChip(`trade-science`,`cards`,`Science card`),tutH(`span`,null,`A science card.`))),
+       tutH(`p`,null,`Go ahead and run it.`)]},
    hint:()=>[`Press `,tutB(`Start task`),`.`]},
 
   {id:`task-see`,coach:!0,module:`comms`,free:!0,dot:!1,minWait:12000,holdAfter:2250,
    run:s=>!!s.activeTask&&!tutClockDone(s),
    until:s=>tutClockDone(s),
    title:()=>`Power drops instantly`,
-   body:()=>[tutP(`Power drops instantly. The cost comes off your batteries the moment you start. Watch the bar fill, then look at the meters.`)]},
+   body:()=>[tutP(`Power drops instantly. Watch the bar fill, then look at Research.`)]},
 
   {id:`task-done`,coach:!0,module:`comms`,dot:!1,targets:()=>[`.resource-meters`],
    title:()=>`Task complete`,
    body:()=>{
      let t=tutTask();
-     return [tutP(tutB(`Research`),` jumped by `,tutB(`+${t.taskReward}%`),`. In the real mission this also unlocks the “What Is a Martian Sol?” science card. Practice runs don’t save cards.`)]}},
+     return [tutP(`Great! `,tutB(`Research`),` went up by `,tutB(`+${t.taskReward}%`),`. A real mission would also give you a science card. This practice run does not save cards.`)]}},
 
   {id:`alert-spot`,coach:!0,module:`greenhouse`,eventId:`scrubber-pressure-spike`,minWait:11250,dismissOnModule:!0,
    until:(s,sel)=>sel===`greenhouse`,
@@ -161,8 +163,8 @@ var TUT_BEATS=[
      dispatch(p)},
    title:()=>`An alert just came in`,
    body:()=>[
-     tutP(`The air cleaner in the Greenhouse is clogged. If nobody fixes it, the outpost loses air and water.`),
-     tutP(`Go to the Greenhouse. The timer stays paused until you get there.`)],
+     tutP(`The air cleaner is stuck. If you leave it, the crew loses air and water.`),
+     tutP(`The timer stays paused until you get there.`)],
    hint:()=>tutGo(`greenhouse`)},
 
   {id:`alert-look`,dot:!1,eventId:`scrubber-pressure-spike`,wait:4000},
@@ -177,31 +179,31 @@ var TUT_BEATS=[
      dispatch({type:`resolve-urgent-event`,eventId:`scrubber-pressure-spike`})},
    targets:()=>[`#anomaly-response`],
    arm:({dispatch,state})=>{let juice=tutJuice(state,8);if(juice)dispatch({type:`tutorial-event`,resources:juice})},
-   title:()=>`Clear the alert`,
-   body:()=>[tutP(`Press `,tutB(`Purge & Vent`),`. It costs a little power. The timer is running now, so don’t wait too long.`)],
+   title:()=>`Keep the air and water`,
+   body:()=>[
+     tutP(`Press `,tutB(`Purge & Vent`),`. You spend a little power, but you keep the air and water.`),
+     tutP(`The timer is running now.`)],
    hint:()=>[`Press `,tutB(`Purge & Vent`),`.`]},
 
   {id:`alert-see`,coach:!0,module:`greenhouse`,free:!0,dot:!1,eventId:`scrubber-pressure-spike`,minWait:9000,
    title:({state})=>tutEventOk(state,`scrubber-pressure-spike`)?`Alert cleared`:`The alert timed out`,
    body:({state})=>tutEventOk(state,`scrubber-pressure-spike`)
-     ?[tutP(`You got it in time. Look at the outpost. The alert is gone.`)]
-     :[tutP(`Time ran out, so the outpost lost some air and water. Look at the meters.`)]},
+     ?[tutP(`Great! You fixed it in time. The alert is gone.`)]
+     :[tutP(`Oopsie! Time ran out. The crew lost some air and water.`)]},
 
   {id:`alert-why`,coach:!0,dot:!1,eventId:`scrubber-pressure-spike`,
    targets:({state})=>tutEventOk(state,`scrubber-pressure-spike`)?[]:[`.resource-meters`],
    title:()=>`Alerts are timed`,
    body:({state})=>tutEventOk(state,`scrubber-pressure-spike`)
-     ?[tutP(`Alerts are timed. Answer them on the module they point at.`)]
-     :[tutP(`The outpost lost air and water. Next time, open the module the alert names before the timer ends.`)]},
+     ?[tutP(`Next time, fix the alert before the timer ends.`)]
+     :[tutP(`The crew lost air and water. Next time, open the place the alert names before the timer ends.`)]},
 
   {id:`shield-go`,coach:!0,module:`habitat`,
    until:(s,sel)=>sel===`habitat`,
    finish:({onSelect})=>onSelect(`habitat`),
    targets:()=>tutAway(`habitat`),
-   title:()=>`Mars has no ozone layer`,
-   body:()=>[
-     tutP(`Earth’s ozone layer blocks a lot of the Sun’s radiation. Mars barely has one, so radiation reaches the crew.`),
-     tutP(`The `,tutB(`Water-Wall Shelter`),` is how you protect them. Open it.`)],
+   title:()=>`Block the Sun’s radiation`,
+   body:()=>[tutP(`The `,tutB(`Water-Wall Shelter`),` uses power to block the Sun’s radiation. Let’s open it.`)],
    hint:()=>tutGo(`habitat`)},
 
   {id:`shield-look`,dot:!1,wait:4000},
@@ -212,8 +214,11 @@ var TUT_BEATS=[
    title:()=>`Stronger shield, more power`,
    body:()=>[
      tutTable([`Mode`,`Blocks radiation`,`Power use`],[`passive`,`active`,`lockdown`].map(k=>({label:de[k].label,cells:[{text:`${Math.round(de[k].mitigation*100)}%`,tone:k===`lockdown`?`up`:``},{text:de[k].powerDraw===0?`None`:`${de[k].powerDraw.toFixed(1)} / sec`,tone:de[k].powerDraw>2?`down`:``}]}))),
-     tutP(tutB(`Lockdown`),` also pauses lab and outside work, and only reaches full strength once you’ve readied the water wall.`),
-     tutH(`p`,{className:`tut-tip`},`Plan ahead: charge the batteries and store air first. `,tutB(`Battery Eco`),` in the Solar Array saves 20% power but slows tasks.`)],
+     tutP(`A stronger shield keeps the crew safer, but it uses more power.`),
+     tutP(`Turn the water wall back down when you are not using it.`),
+     tutP(`If crew health is low because of radiation, turn the water shield up. Otherwise the radiation keeps getting through.`),
+     tutH(`p`,{className:`tut-tip`},`When power is low, or you are in a pinch, try `,tutB(`Battery Eco`),` in the Solar Array. It saves 20% power, but tasks take longer.`),
+     tutP(`You can also turn down whichever module you can spare, so you keep the power you have.`)],
    hint:()=>null},
 
   {id:`wave-spot`,coach:!0,module:`habitat`,eventId:`peak-proton-wave`,minWait:11250,dismissOnModule:!0,
@@ -226,7 +231,7 @@ var TUT_BEATS=[
      let juice=tutJuice(state,15);if(juice)p.resources=juice;
      dispatch(p)},
    title:()=>`Particles from the Sun`,
-   body:()=>[tutP(`A wave of fast particles is reaching the outpost. Mars can’t block them. The shelter can, if you act.`)],
+   body:()=>[tutP(`The shelter can block these particles if you spend power.`)],
    hint:({here})=>here?null:tutGo(`habitat`)},
 
   {id:`wave-look`,dot:!1,eventId:`peak-proton-wave`,wait:4000},
@@ -243,31 +248,33 @@ var TUT_BEATS=[
    leave:({dispatch,state})=>{if(state.shieldMode===`lockdown`)dispatch({type:`tutorial-event`,shieldMode:`passive`})},
    arm:({dispatch,state})=>{let juice=tutJuice(state,15);if(juice)dispatch({type:`tutorial-event`,resources:juice})},
    title:()=>`Block the wave`,
-   body:()=>[tutP(`Press `,tutB(`Capacitor Overdrive`),`. It spends power to block the particles. The timer is running now.`)],
+   body:()=>[
+     tutP(`Press `,tutB(`Capacitor Overdrive`),`. You spend a lot of power, but the crew stays safer.`),
+     tutP(`The timer is running now.`)],
    hint:()=>[`Press `,tutB(`Capacitor Overdrive`),`.`]},
 
   {id:`wave-see`,coach:!0,module:`habitat`,free:!0,dot:!1,eventId:`peak-proton-wave`,minWait:9000,
    title:({state})=>tutEventOk(state,`peak-proton-wave`)?`Wave blocked`:`The wave got through`,
    body:({state})=>tutEventOk(state,`peak-proton-wave`)
-     ?[tutP(`The shelter blocked the particles. Take a look at the crew’s health.`)]
-     :[tutP(`Health dropped. Take a look at the meters.`)]},
+     ?[tutP(`Great! The crew is safer. Look at their health.`)]
+     :[tutP(`Oopsie! Health dropped. Look at the meters.`)]},
 
   {id:`wave-why`,coach:!0,dot:!1,eventId:`peak-proton-wave`,
    targets:({state})=>tutEventOk(state,`peak-proton-wave`)?[]:[`.resource-meters`],
    title:()=>`Shelter first`,
    body:({state})=>tutEventOk(state,`peak-proton-wave`)
-     ?[tutP(`Shelter first, then power. That’s the plan when particles hit.`)]
-     :[tutP(`Health dropped. A stronger shield blocks more particles, but it uses more power. Fill the water wall later so Lockdown can reach full strength.`)]},
+     ?[tutP(`You spent some power to keep the crew safer. Don’t forget to turn the water wall back down when you are not using it.`)]
+     :[tutP(`Health dropped. If crew health is low because of radiation, turn the water shield up.`)]},
 
   {id:`ready`,coach:!0,center:!0,last:!0,nextLabel:`Start Sol 1`,targets:()=>[],
    title:()=>`You’re ready, Commander!`,
    body:()=>[
      tutH(`ul`,{className:`tut-keys`},
        tutH(`li`,{key:1},tutK(`Space`),` Pause and plan`),
-       tutH(`li`,{key:2},tutK(`1–5`),` Jump to a module`),
+       tutH(`li`,{key:2},tutK(`1–5`),` Open a place`),
        tutH(`li`,{key:3},tutK(`R`),` Retry the current day`),
        tutH(`li`,{key:4},tutK(`M`),` Mute`)),
-     tutH(`p`,null,`Reach `,tutB(`100% research`),` and keep Power, Air & Water, and Crew Health above zero through Sol ${T.dayCount}. Good luck!`)]}
+     tutH(`p`,null,`You know the choices now. Fill Research to `,tutB(`100%`),`, and keep Power, Air & Water, and Crew Health above zero.`)]}
 ];
 
 /* ---------- geometry ----------
@@ -538,7 +545,7 @@ function TutorialLayer({state,selected,onSelect,dispatch,isReplay,runId,onFinish
   /* Point them back only once a step actually needs that module. */
   if(mustReturn){
     title=`Back to the ${tutName(beat.module)}`;
-    body=[tutP(`This step is on the `,tutB(tutName(beat.module)),`.`)];
+    body=[tutP(`Come back to the `,tutB(tutName(beat.module)),`.`)];
     hint=tutGo(beat.module);
   }
   let hold=!free&&((beat.gate&&!done)||(beat.until&&!arrived)||mustReturn);
@@ -568,10 +575,10 @@ function TutorialLayer({state,selected,onSelect,dispatch,isReplay,runId,onFinish
 
 function TutorialIntro({onTrain,onSkip,onClose}){
   return tutH(te,{title:`New here, Commander?`,label:`Mission briefing`,icon:`flag`,onDismiss:onClose},
-    tutH(`p`,{className:`dialog-lead`},`Take a practice day first. `,tutB(`Sol 0`),` shows you the meters, the trade-offs, and how to run a task, with nothing at stake.`),
+    tutH(`p`,{className:`dialog-lead`},`Let’s look after a Mars colony together. When you make a choice, you give something up to get something you need.`),
     tutH(`ul`,{className:`tut-list`},
       tutH(`li`,{key:1},tutH(`span`,{className:`tut-dotico tut-c-sun`},tutIco(`clock`,15)),tutH(`span`,null,tutB(`A few minutes.`),` Skip it any time.`)),
-      tutH(`li`,{key:2},tutH(`span`,{className:`tut-dotico tut-c-teal`},tutIco(`check`,15)),tutH(`span`,null,tutB(`Nothing is saved.`),` Your real mission starts fresh afterwards.`)),
+      tutH(`li`,{key:2},tutH(`span`,{className:`tut-dotico tut-c-teal`},tutIco(`check`,15)),tutH(`span`,null,tutB(`Nothing is saved.`),` The real game starts after this, from the beginning.`)),
       tutH(`li`,{key:3},tutH(`span`,{className:`tut-dotico tut-c-grape`},tutIco(`help`,15)),tutH(`span`,null,tutB(`Replay it later`),` from the menu or the How to play window.`))),
     tutH(`div`,{className:`dialog-actions`},
       tutH(`button`,{type:`button`,className:`button button-primary`,onClick:onTrain},tutIco(`play`,18),` Start Sol 0 training`),
