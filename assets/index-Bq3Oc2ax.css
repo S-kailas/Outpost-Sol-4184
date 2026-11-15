@@ -47,6 +47,10 @@ kbd{min-width:26px;font:700 .8rem var(--mono);background:var(--surface);border:2
 .mission-priorities{grid-template-columns:repeat(3,1fr);gap:1.1rem;max-width:1200px;margin:1rem auto 0;display:grid}
 .mission-priorities>div{background:var(--surface);border:var(--line);border-radius:22px;align-items:flex-start;gap:.9rem;padding:1.1rem;display:flex;box-shadow:var(--pop)}
 .mission-priorities h2{font-size:1.35rem}.mission-priorities p{color:var(--muted);margin-top:.3rem}
+.site-footer{justify-content:center;align-items:center;gap:.55rem;max-width:1200px;margin:2rem auto 0;color:var(--ink);font-size:1.2rem;font-weight:700;text-align:center;display:flex;flex-wrap:wrap}
+.site-footer-heart{color:var(--ink)}
+.site-footer a{color:inherit;text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
 .priority-icon{border:var(--line);border-radius:16px;flex:0 0 52px;place-items:center;height:52px;display:grid;color:var(--navy)}
 .priority-power{background:var(--sun)}.priority-health{background:#7fe3cd}.priority-science{background:#c7b2ff}
 /* game shell + top bar */

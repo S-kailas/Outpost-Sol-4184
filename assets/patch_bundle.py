@@ -41,7 +41,11 @@ rep('(0,_.jsx)($e,{state:t,muted:r,onPause:l,onMute:u,onMenu:d})','(0,_.jsx)($e,
 rep('function $e({state:e,muted:t,onPause:n,onMute:r,onMenu:i}){let a=be(e),o=e.pauseReasons.length>0||!!e.outcome,','function $e({state:e,training:tutTraining,muted:t,onPause:n,onMute:r,onMenu:i}){let a=be(e),o=e.pauseReasons.some(e=>e!==`tutorial`)||!!e.outcome,')
 rep('(0,_.jsxs)(`strong`,{children:[`Day `,e.day,` / `,T.dayCount]}),(0,_.jsxs)(`small`,{children:[`Sol `,e.sol]})','(0,_.jsxs)(`strong`,{children:tutTraining?[`Trial`]:[`Day `,e.day,` / `,T.dayCount]}),(0,_.jsxs)(`small`,{children:tutTraining?[`Practice`]:[`Sol `,e.sol]})')
 
-# 8. How to play: Replay tutorial
+# 8. Landing footer
+rep('`Reach 100% and collect ten cards about real NASA science.`})]})]})]})]})}function at(',
+    '`Reach 100% and collect ten cards about real NASA science.`})]})]})]}),(0,_.jsxs)(`footer`,{className:`site-footer`,children:[`Made with `,(0,_.jsx)(`span`,{className:`site-footer-heart`,"aria-hidden":`true`,children:`♥`}),` in Trivandrum`,(0,_.jsx)(`span`,{"aria-hidden":`true`,children:`•`}),(0,_.jsx)(`a`,{href:`https://github.com/S-kailas/Outpost-Sol-4184`,target:`_blank`,rel:`noreferrer noopener`,children:`View Source on GitHub`})]})]})}function at(')
+
+# 9. How to play: Replay tutorial
 rep('function st({onDismiss:e,shortcutsEnabled:t,onToggleShortcuts:n}){','function st({onDismiss:e,shortcutsEnabled:t,onToggleShortcuts:n,onTraining:tutBtn}){')
 rep('(0,_.jsx)(`div`,{className:`dialog-actions`,children:(0,_.jsx)(`button`,{type:`button`,className:`button button-primary`,onClick:e,children:`Got it`})})','(0,_.jsxs)(`div`,{className:`dialog-actions`,children:[(0,_.jsx)(`button`,{type:`button`,className:`button button-primary`,onClick:e,children:`Got it`}),tutBtn&&(0,_.jsxs)(`button`,{type:`button`,className:`button button-outline`,onClick:()=>{e(),tutBtn()},title:`Replays the practice sol. Ends a run in progress.`,children:[(0,_.jsx)(S,{name:`flag`,size:18}),` Replay tutorial`]})]})')
 rep('`R`}),` Retry today`]','`R`}),` Retry the current day`]')
