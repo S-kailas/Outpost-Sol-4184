@@ -8,7 +8,7 @@
 :root{color-scheme:light;font-synthesis:none;--display:"Bricolage Grotesque","DM Sans",sans-serif;--mono:"DM Sans",system-ui,sans-serif;--navy:#231f5c;--ink:#231f5c;--muted:#4a4685;--sky:#d9e8ff;--paper:#fff;--coral:#ff6a3d;--sun:#ffc928;--teal:#12b89a;--grape:#8b5cf6;--blue:#2f9bff;--orange:var(--coral);--gold:var(--sun);--cyan:var(--blue);--mint:var(--teal);--purple:var(--grape);--focus:#ff2d87;--line:3px solid var(--edge);--pop:0 5px 0 var(--edge-shadow);font-family:DM Sans,system-ui,sans-serif;line-height:1.45;color:var(--ink);background:var(--sky)}
 html{font-size:112.5%}
 *,:before,:after{box-sizing:border-box}
-body{min-width:300px;margin:0;background:radial-gradient(circle at 12% 18%,var(--surface) 0 2px,#0000 3px),radial-gradient(circle at 70% 60%,var(--surface) 0 2px,#0000 3px),var(--sky);background-size:90px 90px,130px 130px,auto}
+body{min-width:300px;margin:0;background:radial-gradient(circle at 12% 18%,var(--star) 0 2px,#0000 3px),radial-gradient(circle at 70% 60%,var(--star) 0 2px,#0000 3px),var(--sky);background-size:90px 90px,130px 130px,auto}
 h1,h2,h3,h4,p,figure{margin:0}
 h1,h2,h3,h4{font-family:var(--display);line-height:1.1;letter-spacing:-.01em}
 button,select{font:inherit}button{color:inherit;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}
@@ -234,6 +234,7 @@ progress::-webkit-progress-bar{background:var(--inset)}progress::-webkit-progres
 :root[data-theme=dark] .module-navigation button[aria-pressed=true] kbd{background:#fff;color:var(--navy);border-color:var(--navy);box-shadow:0 2px 0 var(--navy)}
 :root[data-theme=dark] .module-navigation button:hover:not([aria-pressed=true]){background:var(--hover)}
 :root[data-theme=dark] .mission-priorities p,:root[data-theme=dark] .meter-caption{color:var(--muted)}
+:root[data-theme=dark] .mode-buttons button[aria-pressed=true] small{color:var(--navy)}
 .theme-toggle{transition:transform .08s,box-shadow .08s,background-color .2s}
 @media (prefers-reduced-motion:no-preference){body{transition:background-color .25s}}
 @media (width<=920px){.landing-hero{grid-template-columns:1fr}.hero-copy h1{font-size:clamp(3.4rem,12vw,5.2rem)}.game-grid{grid-template-columns:1fr}.module-navigation kbd{display:none}.module-navigation button{flex-direction:column;gap:.2rem;font-size:.85rem}}
@@ -249,3 +250,54 @@ progress::-webkit-progress-bar{background:var(--inset)}progress::-webkit-progres
 .science-card-art.has-banner{aspect-ratio:3/1;height:auto;overflow:hidden}
 .science-card-art.has-banner .card-banner-img{display:block;object-fit:cover;width:100%;height:100%;position:absolute;inset:0}
 .science-card-art.has-banner .micro-label{z-index:1;background:var(--surface);color:var(--ink);border-radius:999px;padding:.05rem .55rem}
+
+/* ===== Sol 0 training ===== */
+:root{--tut-dim:#1b1850c4}
+:root[data-theme=dark]{--tut-dim:#04030fd1}
+.game-shell.is-training .sol-brief{display:none}
+.tut-dim{position:fixed;inset:0;z-index:40;background:var(--tut-dim)}
+.tut-fx{position:fixed;inset:0;z-index:42;pointer-events:none}
+.tut-block,.tut-ring{display:none;transition:none}
+.tut-block{position:fixed;z-index:41;pointer-events:auto}
+.tut-ring{position:fixed;z-index:42;pointer-events:none;box-sizing:border-box;border:4px solid var(--sun);border-radius:20px;box-shadow:0 0 0 5px #ffc92838,0 5px 0 var(--edge-shadow);animation:tut-pulse 1.15s ease-in-out infinite}
+@keyframes tut-pulse{50%{box-shadow:0 0 0 9px #ffc9281c,0 5px 0 var(--edge-shadow)}}
+.tut-live{position:fixed;z-index:44;top:max(.6rem,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:.35rem;cursor:pointer;background:var(--sun);color:var(--navy);border:2px solid var(--edge);border-radius:999px;padding:.12rem .7rem;font:800 .82rem var(--mono);box-shadow:0 3px 0 var(--edge-shadow)}
+.tut-card{position:fixed;z-index:43;visibility:hidden;width:min(400px,calc(100vw - 2rem));max-height:calc(100svh - 1.5rem);overflow:auto;background:var(--surface);color:var(--ink);border:var(--line);border-radius:24px;box-shadow:0 8px 0 var(--edge-shadow);padding:.95rem 1.1rem 1.1rem}
+.tut-card.tut-glide{transition:left .45s cubic-bezier(.22,.7,.25,1),top .45s cubic-bezier(.22,.7,.25,1)}
+.tut-pop{animation:tut-pop .14s ease-out}
+@keyframes tut-pop{from{opacity:.45;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tut-card:focus,.tut-card h2:focus{outline:none}
+.tut-center{width:min(470px,calc(100vw - 2rem))}
+.tut-card-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.55rem}
+.tut-badge{display:inline-flex;align-items:center;gap:.3rem;background:var(--sun);color:var(--navy);border:2px solid var(--edge);border-radius:999px;padding:.05rem .65rem;font:800 .85rem var(--mono)}
+.tut-card h2{font-size:1.5rem;margin-bottom:.45rem}
+.tut-body{font-size:1rem}.tut-table+p,.tut-list+p,.tut-keys+p{margin-top:.6rem}.tut-body p+p,.tut-body .tut-table,.tut-body .tut-list{margin-top:.55rem}.tut-body b{font-weight:800}
+.tut-tip{background:var(--tint-sun);border:2px dashed var(--edge);border-radius:12px;padding:.4rem .65rem;font-weight:700;font-size:.95rem}
+.tut-facts{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem}
+.tut-facts span{display:inline-flex;align-items:center;gap:.3rem;background:var(--surface-2);border:2px solid var(--edge);border-radius:999px;padding:.1rem .65rem;font-weight:700;font-size:.9rem}
+.tut-list{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+.tut-list li{display:flex;gap:.6rem;align-items:flex-start;font-size:.98rem;line-height:1.35}
+.tut-dotico{flex:0 0 28px;height:28px;border:2px solid var(--edge);border-radius:50%;display:grid;place-items:center;color:var(--navy)}
+.tut-c-sun{background:var(--sun)}.tut-c-blue{background:var(--blue)}.tut-c-teal{background:var(--teal)}.tut-c-grape{background:var(--grape);color:#fff}
+.tut-chips li{align-items:center;flex-wrap:wrap}.tut-chips li>span:last-child{flex:1 1 9rem}
+.tut-chip{display:inline-flex;align-items:center;gap:.25rem;border:2px solid var(--edge);border-radius:999px;padding:.1rem .55rem;font-size:.85rem;font-weight:800;color:var(--ink);white-space:nowrap}
+.tut-chip.trade-power{background:var(--tint-sun)}.tut-chip.trade-science{background:var(--tint-grape)}
+.tut-table{display:grid;border:2px solid var(--edge);border-radius:14px;overflow:hidden;font-size:.92rem}
+.tut-tr{display:grid;grid-template-columns:1.25fr repeat(calc(var(--cols) - 1),1fr);gap:.4rem;padding:.4rem .65rem;align-items:center}
+.tut-tr+.tut-tr{border-top:2px solid var(--edge)}
+.tut-th{background:var(--surface-2);font:800 .8rem var(--mono);color:var(--muted)}
+.tut-rowlabel{font-weight:800;display:flex;align-items:center;gap:.2rem}
+.tut-tr span{min-width:0}.tut-tr [role=cell]{font-weight:800}
+.tut-up{color:var(--ok-text)}.tut-down{color:var(--danger-text)}
+.tut-keys{list-style:none;margin:0;padding:0;display:grid;gap:.4rem}.tut-keys li{display:flex;align-items:center;gap:.5rem;font-weight:700}
+.tut-hint{display:flex;align-items:center;gap:.6rem;margin-top:.8rem;background:var(--tint-sun);border:2px dashed var(--edge);border-radius:14px;padding:.55rem .75rem;font-weight:700}
+.tut-hint svg{color:var(--coral);animation:tut-nudge .8s ease-in-out infinite alternate}
+@keyframes tut-nudge{to{transform:translateX(5px)}}
+.tut-dots{display:flex;gap:6px;margin-top:.9rem}
+.tut-dot{width:10px;height:10px;border-radius:50%;background:var(--toggle-off);border:2px solid var(--edge)}
+.tut-dot[data-state=done]{background:var(--teal)}.tut-dot[data-state=now]{background:var(--coral);transform:scale(1.3)}
+.tut-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;margin-top:.8rem}
+.tut-nav{display:flex;gap:.5rem;align-items:center;margin-left:auto}
+.tut-next{min-height:46px}
+@media (width<=700px){.tut-sheet{left:.75rem;right:.75rem;bottom:.75rem;top:auto;width:auto;max-height:56svh;padding:.8rem .9rem .95rem;border-radius:22px}.tut-sheet h2{font-size:1.3rem}.tut-sheet .tut-dots{display:none}.tut-sheet .tut-body{font-size:.95rem}.tut-sheet.tut-center{width:auto}.tut-card.tut-glide{transition:none}.game-shell.is-training{padding-bottom:calc(58svh + 1rem)}}
+@media (prefers-reduced-motion:reduce){.tut-ring,.tut-hint svg,.tut-pop{animation:none!important}.tut-card.tut-glide{transition:none}}
